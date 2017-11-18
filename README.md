@@ -1,8 +1,8 @@
 # Docker-Hello-World
 
-1 Creation of two containers, mvc app and database. Then communication between them.
+1 - Creation of two containers, mvc app and database. Then communication between them.
   - it does just a read from a seeded database.
-2 Added the project "crudapi", will be connected with the same sql server in container
+2 - Added the project "crudapi", will be connected with the same sql server in container
   - use of swagger
 
 
