@@ -1,3 +1,7 @@
+#The settings.json file can have default values for the ConnectionString property or for any other property. 
+#However, those properties will be overridden by the values of environment variables that you specify in the 
+#docker-compose.override.yml file.
+  
 version: '3'
 
 services:
@@ -8,10 +12,14 @@ services:
       - CatalogBaseUrl=http://localhost:5106
     ports:
       - "5106:5106"
-
   sql.data:
     environment:
       - MSSQL_SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
       - "5433:1433"
+  crudapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
