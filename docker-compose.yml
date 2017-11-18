@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  eshopweb:
+    image: eshop/web
+    build:
+      context: ./eShopWeb
+      dockerfile: Dockerfile
+      
+    depends_on:
+      - sql.data #depend on the DATABASE service we create
+  sql.data:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+    - SA_PASSWORD=Pass@word
+    - ACCEPT_EULA=Y
+    ports:
+    - "5434:1433"
+
