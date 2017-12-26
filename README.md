@@ -60,7 +60,7 @@ Personal Notes and reflections.
 
 
 ### BOOK SECTION 4
-**Architecting Container- and Microservice-Based Applications**
+"**Architecting Container- and Microservice-Based Applications**"
 
 
 + pag. 27/297 -> "**Containerizing monolithic applications**"
