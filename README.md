@@ -2,6 +2,12 @@
 
 Based on the book [.NET Microservices. Architecture for Containerized .NET Applications](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/), this project is a basic implementation of what learned.
 
+**Useful Links**
+
+  - https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker
+  - https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker
+  - https://hub.docker.com/r/microsoft/mssql-server-linux/
+
 ## STEP 1
 Creation of two containers, the MVC app and database. 
 Implemented communication between them. Silly logic, just read from a seeded database.
@@ -50,7 +56,7 @@ Added the project "crudapi", will be connected with the same sql server in conta
 	```
 
 ## STEP 3
-Personal Notes:
+Personal Notes and reflections.
 
 
 **SECTION 4
@@ -149,8 +155,22 @@ Personal Notes:
 
 + pag. 55/297 -> **ASYNCHRONOUS Single-receiver message-based communication**
 
-## Useful Links
+=========================================================
+**SECTION 5
+Development Process for Docker-Based Applications**
 
-  - https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker
-  - https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker
-  - https://hub.docker.com/r/microsoft/mssql-server-linux/
+
++ pag. 76/297 -> **Workflow for developing Docker container-based applications**
+
++ pag. 78/297 
+   - You need a Dockerfile for each custom image you want to build; you also need a Dockerfile for each container to be deployed.
+   - If your application contains a single custom service, you need a single Dockerfile. If your application contains multiple services (as in a microservices architecture), you need one Dockerfile for each service.
+  - The **Dockerfile** is placed in the root folder of your application or service. It contains the commands that tell Docker how to set up and run your application or service in a container.
+
++ pag. 79/297 -> Example of a docker file
+
++ pag. 81/297 -> Create Images Defined at Dockerfile
+   - need to create the Docker images and deploy containers to a local Docker host (Windows or Linux VM) and run, test, and debug against those local containers.
+   - The **docker-compose.yml** file lets you define a set of related services to be deployed as a composed application
+
++ pag.85/297 -> **Build and run your Docker application**
