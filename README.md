@@ -1,16 +1,20 @@
 # Docker-Hello-World
 
-1 - Creation of two containers, mvc app and database. Then communication between them.
+Basic project to test containers: 
+##STEP 1
+Creation of two containers, the MVC app and database. Then communication between them.
   - it does just a read from a seeded database.
-2 - Added the project "crudapi", will be connected with the same sql server in container
+##STEP 2
+Added the project "crudapi", will be connected with the same sql server in container
   - use of swagger
 
 
 How to connect to the DB in container bfrom MSSQL Management
-  - with this connection string:
-    Server=tcp:127.0.0.1,5433;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word
 
-  - and this "docker-compose.override.yml"
+  - with te connection string: Server=tcp:127.0.0.1,5433;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word
+
+  - and and the "docker-compose.override.yml"
+   ```
     version: '3'
 	services:
 	  eshopweb:
@@ -27,14 +31,19 @@ How to connect to the DB in container bfrom MSSQL Management
 	      - ACCEPT_EULA=Y
 	    ports:
 	      - "5433:1433"
+ ```
 
-    - ant then this running container launched by visual studio
+ - this running container launched by visual studio
+  ```
     13049647284c        microsoft/mssql-server-linux:latest   "/bin/sh -c /opt/m..."   14 hours ago        Up 14 hours         0.0.0.0:5433->1433/tcp, 0.0.0.0:5434->1433/tcp   dockercompose12275427739607584068_sql.data_1	 
+    ```
 
-    - This is how to connect from management studio
-    127.0.0.1,5433
+ - Here the credentials to connect from management studio
+    ```
+   127.0.0.1,5433
     sa
     Pass@word 
+	 ```
 
 Useful Links
   - https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker
