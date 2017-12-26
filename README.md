@@ -1,9 +1,11 @@
-# Docker-Hello-World
+# Docker Hello World
 
-Basic project to test containers: 
+Basic project to test containers:
+
 ##STEP 1
-Creation of two containers, the MVC app and database. Then communication between them.
-  - it does just a read from a seeded database.
+Creation of two containers, the MVC app and database. 
+Then communication between them. Silly logic, just read from a seeded database.
+
 ##STEP 2
 Added the project "crudapi", will be connected with the same sql server in container
   - use of swagger
