@@ -52,10 +52,10 @@ Added the project "crudapi", will be connected with the same sql server in conta
 ## STEP 3
 Personal Notes:
 
-=========================================================
-**SECTION 4**
-"Architecting Container- and Microservice-Based Applications"
-=========================================================
+
+**SECTION 4
+"Architecting Container- and Microservice-Based Applications"**
+
 
 + pag. 27/297 -> "**Containerizing monolithic applications**"
 
