@@ -52,7 +52,7 @@ namespace Microsoft.eShopWeb.Controllers
 
         [HttpGet("{id}")]
         [Route("[controller]/pic/{id}")]
-        // GET: /<controller>/pic/{id}
+        // GET: /<controller>/pic/{id} --> http://localhost:5106/catalog/pic/1
         public IActionResult GetImage(int id)
         {
             var contentRoot = _env.ContentRootPath + "//Pics";

@@ -10,6 +10,7 @@ namespace crudapi.Controllers
     public class ValuesController : Controller
     {
         // GET api/values
+        //With the current configuration --> http://localhost:32776/api/values
         [HttpGet]
         public IEnumerable<string> Get()
         {

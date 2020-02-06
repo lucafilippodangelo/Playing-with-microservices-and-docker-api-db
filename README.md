@@ -413,3 +413,50 @@ The goal of resiliency is to return the application to a fully functioning state
 
 + pag. 260/297 **Implementing resilient Entity Framework Core SQL connections**
    - it's code to specify in "Startup.cs" that at EF Core connection level enables resilient SQL connections that are retried if the connection fails
+
+
+
+
+
+
+   # DISTRITEST_API_DATA
+Api application interfacing with a mssql docker image
+
+https://docs.docker.com/get-started/
+
+https://hub.docker.com/editions/community/docker-ce-desktop-windows
+
+---
+SQL SERVER SETTINGS, useful to create and run the container -> https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-2017
+restart container -> docker start $(docker ps -a -q -f status=exited)
+remove container and images -> https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
+
+aplication setup resource -> https://ghost.kontena.io/dot-net-core-and-sql-server-in-docker/
+
+1) create a web application and enable docker support
+   - //LD DISTRITEST_API_001 create model
+   - //LD DISTRITEST_API_002 create context
+   - //LD DISTRITEST_API_003, //LD DISTRITEST_API_004 create interface for dependency injection and use in controller
+   - //LD DISTRITEST_API_005,//LD DISTRITEST_API_006 add setup for dependency injection
+   - //LD DISTRITEST_API_007 implement a repository
+   - //LD DISTRITEST_API_008 The final step needed is to register our new database context with the Asp.Net dependency injection framework, and fetch the SQL Server credentials. In the file Startup.cs, modify the ConfigureServices method:
+     
+
+2) download image and run image instance in container for sql server
+  - with powershell run:
+    - docker pull mcr.microsoft.com/mssql/server:2017-latest
+    - docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<Smaialeccio1>" -p 1433:1433 --name sql1 -d mcr.microsoft.com/mssql/server:2017-latest
+	
+
+
+- some useful things to know about the docker file 
+  - //LD DISTRITEST_API_009
+    - "FROM" is the basic image I start from, in this case for this web app I start from "aspnetcore:2.0-nanoserver-1709" 
+    - "WORKDIR /app" sets the working directory inside the container I'm building
+
+
+3) now I set as a startup project the "docker-compose". First time I will build the application, the framework will download all the packages and will setup the image for .net core
+  - that's why if I run "docker ps -a" in powershel, I will be able to see the new container: 
+    CONTAINER ID        IMAGE               COMMAND                    CREATED             STATUS              PORTS                   NAMES
+    6c6c0ef9350c        webapi:dev          "C:\\remote_debugger\\…"   2 minutes ago       Up 2 minutes        0.0.0.0:60048->80/tcp   dockercompose7289874142764663899_webapi_1
+	- to execute a postman GET I have to do "http://getThisIpFromTheWebPageExecutedWhenProjectRan:80/api/persons"
