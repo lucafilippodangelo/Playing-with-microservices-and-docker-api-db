@@ -27,11 +27,12 @@ namespace Microsoft.eShopWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //First DbContext
             services.AddDbContext<CatalogContext>(c =>
             {
                 try
                 {
-                    var text = Configuration["ConnectionString"];
+                    //var text = Configuration["ConnectionString"];
                     c.UseSqlServer(Configuration["ConnectionString"]);
                     c.ConfigureWarnings(wb =>
                     {
@@ -47,6 +48,7 @@ namespace Microsoft.eShopWeb
 
             services.AddTransient<ICatalogService, CatalogService>();
             services.Configure<CatalogSettings>(Configuration);
+
             services.AddMvc();
         }
 

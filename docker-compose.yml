@@ -1,14 +1,6 @@
 version: '3.4'
 
 services:
-#//LD WEB APP
-  eshopweb:
-    image: eshop/web
-    build:
-      context: ./eShopWeb
-      dockerfile: Dockerfile
-    depends_on:
-      - sql.data #depend on the DATABASE service we create
 
 #//LD DATABASE IN SEPARATED CONTAINER CALLED BY THE MVC APP
   sql.data:
@@ -17,7 +9,7 @@ services:
     - SA_PASSWORD=Pass@word
     - ACCEPT_EULA=Y
     ports:
-    - "5434:1433"
+    - "5433:1433"
 
 
   crudapi:
@@ -25,3 +17,15 @@ services:
     build:
       context: ./crudapi
       dockerfile: Dockerfile
+    depends_on:
+      - sql.data #depend on the DATABASE service we create
+
+
+#// LAUNCH A WEB APP 
+#  eshopweb:
+#    image: eshop/web
+#    build:
+#      context: ./eShopWeb
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - sql.data #depend on the DATABASE service we create
