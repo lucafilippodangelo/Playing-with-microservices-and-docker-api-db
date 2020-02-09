@@ -27,5 +27,5 @@ services:
     #  - ConnectionString=Server=sql.data;Database=LdDb;User Id=sa;Password=Pass@word
     #  - CatalogBaseUrl=http://localhost:5106
     #ports:
-     # - "5106:5106"
+    # - "5106:5106"
 

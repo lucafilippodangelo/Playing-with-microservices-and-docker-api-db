@@ -10,6 +10,11 @@ namespace crudapi
 {
     public class DatabaseAndDbContentSeed
     {
+        /// <summary>
+        /// LD This method create the database if it do not exists. In this case I do not do any seeding but just run the migration
+        /// </summary>
+        /// <param name="applicationBuilder"></param>
+        /// <returns></returns>
         public static async Task SeedAsync(IApplicationBuilder applicationBuilder)
         {
             try

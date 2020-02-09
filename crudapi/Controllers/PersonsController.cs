@@ -10,7 +10,7 @@ namespace crudapi.Controllers
     [Route("api/persons")]
     public class PersonsController : Controller
     {
-        //LD DISTRITEST_API_004
+
         private readonly IPersonRepository _personRepository;
 
         public PersonsController(IPersonRepository personRepository)

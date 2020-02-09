@@ -1,63 +1,118 @@
 ﻿# Docker Hello World
 
-Based on the book [.NET Microservices. Architecture for Containerized .NET Applications](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/), this project is a basic implementation of what learned.
-
-**Useful Links**
-
-  - https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker
-  - https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker
-  - https://hub.docker.com/r/microsoft/mssql-server-linux/
-
 ## STEP 1
 Creation of two containers, the MVC app and database. 
 Implemented communication between them. Silly logic, just read from a seeded database.
 
 ## STEP 2
-Added the project "crudapi", will be connected with the same sql server in container
-  - use of swagger
+Added the project "crudapi", will be connected with the same sql server in container. This project has a "Person" controller with CRUDsw on the Person class
 
-**How to connect to the DB in container bfrom MSSQL Management**
+  **and the "docker-compose.yml"**
 
-  **with te connection string** -> Server=tcp:127.0.0.1,5433;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word
+   ```
+version: '3.4'
+
+services:
+
+#//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
+  sql.data:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+    - SA_PASSWORD=Pass@word
+    - ACCEPT_EULA=Y
+    ports:
+    - "5433:1433"
+
+
+  crudapi:
+    image: crudapi
+    build:
+      context: ./crudapi
+      dockerfile: Dockerfile
+    depends_on:
+      - sql.data #depend on the DATABASE service 
+
+
+#// THIS IS A WEB APP, AT THE MOMENT I'M NOT RUNNING THE CONTAINER FOR THIS PROJECT
+#  eshopweb:
+#    image: eshop/web
+#    build:
+#      context: ./eShopWeb
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - sql.data #depend on the DATABASE service
+  ```
 
   **and the "docker-compose.override.yml"**
 
    ```
-    version: '3'
-	services:
-	  eshopweb:
-	    environment:
-	      - ASPNETCORE_ENVIRONMENT=Development
-	      - ConnectionString=Server=sql.data;Database=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word
-	      - CatalogBaseUrl=http://localhost:5106
-	    ports:
-	      - "5106:5106"
+   version: '3.4'
 
-	  sql.data:
-	    environment:
-	      - MSSQL_SA_PASSWORD=Pass@word
-	      - ACCEPT_EULA=Y
-	    ports:
-	      - "5433:1433"
-  ```
+services:
+  sql.data:
+    environment:
+      - MSSQL_SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "5433:1433"
 
- **this running container launched by visual studio** 
 
+  crudapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sql.data;Database=LdDb;User Id=sa;Password=Pass@word
+    ports:
+      - "32776:80"
+
+
+  #eshopweb:
+    #environment:
+    #  - ASPNETCORE_ENVIRONMENT=Development
+    #  - ConnectionString=Server=sql.data;Database=LdDb;User Id=sa;Password=Pass@word
+    #  - CatalogBaseUrl=http://localhost:5106
+    #ports:
+    # - "5106:5106"
+
+    #EXAMPLES ON HOW TO CONSUME ENDPOINTS WITH THIS CONFIGURATION
+#   http://localhost:32776/api/persons/getPersons
+#   http://localhost:32776/api/persons/addPerson
+
+#EXAMPLE ON HOW TO DO THE SAME FOR THE SAME PROJECT IF I DO NOT RUN UNDER CONTAINERS
+#   http://localhost:61724/api/persons/getPersons (this is the port I have in launchSettings.json)
+#   http://localhost:61724/api/persons/addPerson (this is the port I have in launchSettings.json)
    ```
-   13049647284c        microsoft/mssql-server-linux:latest   "/bin/sh -c /opt/m..."   14 hours ago        Up 14 hours         0.0.0.0:5433->1433/tcp, 0.0.0.0:5434->1433/tcp   dockercompose12275427739607584068_sql.data_1	 
-   ```
 
- **Here the credentials to connect from management studio**
-
+ **Here the credentials to connect SQL management studio with a contenarized SQL DB**
+ Any container when running locally is on "127.0.0.1" with port and password specified in docher-compose.yml. The user is any time "Super User"
+ In this case:
     ```
     127.0.0.1,5433
     sa
     Pass@word 
 	```
 
-## STEP 3
-Personal Notes and reflections.
+## LINKS AND EXTERNAL RESOURCES USED
+**Useful Links**
 
+  - https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-configure-docker
+  - https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker
+  - https://hub.docker.com/r/microsoft/mssql-server-linux/
+  - SQL SERVER SETTINGS, useful to create and run the container -> https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-2017
+  - restart container -> docker start $(docker ps -a -q -f status=exited)
+  - remove container and images -> https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
+  - https://ghost.kontena.io/dot-net-core-and-sql-server-in-docker/
+
+**Docker Compose**
+Now I set as a startup project the "docker-compose". First time I will build the application, the framework will download all the packages and will setup the image for .net core
+  - that's why if I run "docker ps -a" in powershel, I will be able to see the new container: 
+    CONTAINER ID        IMAGE               COMMAND                    CREATED             STATUS              PORTS                   NAMES
+    6c6c0ef9350c        webapi:dev          "C:\\remote_debugger\\…"   2 minutes ago       Up 2 minutes        0.0.0.0:60048->80/tcp   dockercompose7289874142764663899_webapi_1
+	- to execute a postman GET I have to do "http://getThisIpFromTheWebPageExecutedWhenProjectRan:80/api/persons"
+
+
+## STEP 3
+
+Based on the book [.NET Microservices. Architecture for Containerized .NET Applications](https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/), this project is a basic implementation of what learned.
 
 ### BOOK SECTION 4
 "**Architecting Container- and Microservice-Based Applications**"
@@ -417,46 +472,3 @@ The goal of resiliency is to return the application to a fully functioning state
 
 
 
-
-
-   # DISTRITEST_API_DATA
-Api application interfacing with a mssql docker image
-
-https://docs.docker.com/get-started/
-
-https://hub.docker.com/editions/community/docker-ce-desktop-windows
-
----
-SQL SERVER SETTINGS, useful to create and run the container -> https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-2017
-restart container -> docker start $(docker ps -a -q -f status=exited)
-remove container and images -> https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
-
-aplication setup resource -> https://ghost.kontena.io/dot-net-core-and-sql-server-in-docker/
-
-1) create a web application and enable docker support
-   - //LD DISTRITEST_API_001 create model
-   - //LD DISTRITEST_API_002 create context
-   - //LD DISTRITEST_API_003, //LD DISTRITEST_API_004 create interface for dependency injection and use in controller
-   - //LD DISTRITEST_API_005,//LD DISTRITEST_API_006 add setup for dependency injection
-   - //LD DISTRITEST_API_007 implement a repository
-   - //LD DISTRITEST_API_008 The final step needed is to register our new database context with the Asp.Net dependency injection framework, and fetch the SQL Server credentials. In the file Startup.cs, modify the ConfigureServices method:
-     
-
-2) download image and run image instance in container for sql server
-  - with powershell run:
-    - docker pull mcr.microsoft.com/mssql/server:2017-latest
-    - docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<Smaialeccio1>" -p 1433:1433 --name sql1 -d mcr.microsoft.com/mssql/server:2017-latest
-	
-
-
-- some useful things to know about the docker file 
-  - //LD DISTRITEST_API_009
-    - "FROM" is the basic image I start from, in this case for this web app I start from "aspnetcore:2.0-nanoserver-1709" 
-    - "WORKDIR /app" sets the working directory inside the container I'm building
-
-
-3) now I set as a startup project the "docker-compose". First time I will build the application, the framework will download all the packages and will setup the image for .net core
-  - that's why if I run "docker ps -a" in powershel, I will be able to see the new container: 
-    CONTAINER ID        IMAGE               COMMAND                    CREATED             STATUS              PORTS                   NAMES
-    6c6c0ef9350c        webapi:dev          "C:\\remote_debugger\\…"   2 minutes ago       Up 2 minutes        0.0.0.0:60048->80/tcp   dockercompose7289874142764663899_webapi_1
-	- to execute a postman GET I have to do "http://getThisIpFromTheWebPageExecutedWhenProjectRan:80/api/persons"

@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
 
-#//LD DATABASE IN SEPARATED CONTAINER CALLED BY THE MVC APP
+#//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
   sql.data:
     image: microsoft/mssql-server-linux:latest
     environment:
@@ -18,14 +18,22 @@ services:
       context: ./crudapi
       dockerfile: Dockerfile
     depends_on:
-      - sql.data #depend on the DATABASE service we create
+      - sql.data #depend on the DATABASE service 
 
 
-#// LAUNCH A WEB APP 
+#// THIS IS A WEB APP, AT THE MOMENT I'M NOT RUNNING THE CONTAINER FOR THIS PROJECT
 #  eshopweb:
 #    image: eshop/web
 #    build:
 #      context: ./eShopWeb
 #      dockerfile: Dockerfile
 #    depends_on:
-#      - sql.data #depend on the DATABASE service we create
+#      - sql.data #depend on the DATABASE service
+
+#EXAMPLES ON HOW TO CONSUME ENDPOINTS WITH THIS CONFIGURATION
+#   http://localhost:32776/api/persons/getPersons
+#   http://localhost:32776/api/persons/addPerson
+
+#EXAMPLE ON HOW TO DO THE SAME FOR THE SAME PROJECT IF I DO NOT RUN UNDER CONTAINERS
+#   http://localhost:61724/api/persons/getPersons (this is the port I have in launchSettings.json)
+#   http://localhost:61724/api/persons/addPerson (this is the port I have in launchSettings.json)
