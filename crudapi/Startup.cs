@@ -44,7 +44,12 @@ namespace crudapi
                 }
             });
 
+            var test = new RabbitMqConsumer();
+            services.AddSingleton<IRabbitMqConsumer>(test.init());
+
             services.AddScoped<IPersonRepository, PersonRepository>();
+
+
 
             services.AddMvc();
 

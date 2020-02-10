@@ -12,6 +12,7 @@ namespace crudapi
         public PersonContext(DbContextOptions options) : base(options)
         {}
 
+
         public DbSet<Person> Persons { get; set; }
     }
 }
