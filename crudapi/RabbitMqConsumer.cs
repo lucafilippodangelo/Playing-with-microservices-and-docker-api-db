@@ -1,5 +1,7 @@
 ﻿using eShopWeb.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -11,24 +13,16 @@ using System.Threading.Tasks;
 
 namespace crudapi
 {
-    public interface IRabbitMqConsumer
+ 
+
+    public class RabbitMqConsumer 
     {
-        void init();
-    }
 
-    public class RabbitMqConsumer : IRabbitMqConsumer
-    {
-        private PersonRepository _personRepsitory;
+        public RabbitMqConsumer() {}
 
-        public RabbitMqConsumer(PersonRepository personRepsitory)
-        { 
-            init();
-            _personRepsitory = personRepsitory;
-        }
-
-        public void init()
+        public static async Task init(IApplicationBuilder applicationBuilder)
         {
-            
+            var test = new RabbitMqConsumer();
 
             Console.WriteLine("starting consumption");
             var factory = new ConnectionFactory()
@@ -55,12 +49,23 @@ namespace crudapi
                     //var deserialized = JsonConvert.DeserializeObject<AddUser>(message);
                     Console.WriteLine(message);
 
-                    try {
-                        //LD WRITING A RECORD TO BE REFACTORED
-                        _personRepsitory.AddPerson(new eShopWeb.Models.Person() { name = "NAME - " + message });
-                        _personRepsitory.Save();
+                    try
+                    {
+                        using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+                        {
+                            var dataContext = serviceScope.ServiceProvider.GetService<PersonContext>();
+
+                            //if table already exists the below attempt of migration will go wrong
+                            dataContext.Persons.Add(new eShopWeb.Models.Person() { name = "NAME - " + message });
+                            dataContext.SaveChanges();
+                        }
                     }
-                    catch (Exception er) { Console.WriteLine(er.Message); }
+                    catch (Exception ex)
+                    {
+                        var luca = ex.Message;
+                    }
+
+
 
 
                 };

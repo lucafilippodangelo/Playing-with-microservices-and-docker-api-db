@@ -5,6 +5,7 @@ services:
 #//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
   sql.data:
     image: microsoft/mssql-server-linux:latest
+    container_name: sql_database
     environment:
     - SA_PASSWORD=Pass@word
     - ACCEPT_EULA=Y
@@ -14,6 +15,7 @@ services:
 
   crudapi:
     image: crudapi
+    container_name: crud_api
     build:
       context: ./crudapi
       dockerfile: Dockerfile

@@ -44,10 +44,12 @@ namespace crudapi
                 }
             });
 
-            var test = new RabbitMqConsumer();
-            services.AddSingleton<IRabbitMqConsumer>(test.init());
+            //var test = new RabbitMqConsumer();
+            //services.AddSingleton<IRabbitMqConsumer>(test);
 
-            services.AddScoped<IPersonRepository, PersonRepository>();
+
+
+            //services.AddScoped<IPersonRepository, PersonRepository>();
 
 
 
@@ -63,6 +65,10 @@ namespace crudapi
                 app.UseDeveloperExceptionPage();
             }
 
+            RabbitMqProducer.init(app);
+            RabbitMqConsumer.init(app);
+
+            
             app.UseMvc();
 
             //Seed Data
