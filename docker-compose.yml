@@ -11,7 +11,8 @@ services:
     - ACCEPT_EULA=Y
     ports:
     - "5433:1433"
-
+# inspect the IP of this db -> docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" sql_database
+# how to connect from management studio: localhost,5444 - Pass@word
 
   crudapi:
     image: crudapi

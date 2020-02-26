@@ -22,16 +22,27 @@ namespace crudapi
 
         public static async Task init(IApplicationBuilder applicationBuilder)
         {
-            var test = new RabbitMqConsumer();
+            //var test = new RabbitMqConsumer();
 
             Console.WriteLine("starting consumption");
             var factory = new ConnectionFactory()
             {
-                HostName = "localhost",
+                HostName = "172.21.0.1", //IT'S important to match the connection IP I see in the rabbitMQ web page -> http://localhost:15672/#/connections
                 Port = 5672,
                 UserName = "guest",
                 Password = "guest"
             };
+
+            try
+            {
+                var connection = factory.CreateConnection();
+            }
+            catch (Exception ex)
+            {
+                var luca = ex.Message;
+            }
+
+
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
