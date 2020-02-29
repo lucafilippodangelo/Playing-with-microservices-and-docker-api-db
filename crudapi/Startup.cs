@@ -73,8 +73,6 @@ namespace crudapi
             //RabbitMqProducer.init(app);
             RabbitMqConsumer.init(app);
 
-           
-
             app.UseMvc();
 
             //Seed Data

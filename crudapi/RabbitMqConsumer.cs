@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +18,15 @@ namespace crudapi
 
     public class RabbitMqConsumer 
     {
-
+       
         public RabbitMqConsumer() {}
-
+ 
         public static async Task init(IApplicationBuilder applicationBuilder)
         {
-            //var test = new RabbitMqConsumer();
-
-            Console.WriteLine("starting consumption");
+           
             var factory = new ConnectionFactory()
             {
-                HostName = "172.21.0.1", //IT'S important to match the connection IP I see in the rabbitMQ web page -> http://localhost:15672/#/connections
+                HostName = "host.docker.internal", //IT'S important to match the connection IP I see in the rabbitMQ web page -> http://localhost:15672/#/connections
                 Port = 5672,
                 UserName = "guest",
                 Password = "guest"
@@ -35,7 +34,7 @@ namespace crudapi
 
             try
             {
-                var connection = factory.CreateConnection();
+                var connectionX = factory.CreateConnection();
             }
             catch (Exception ex)
             {
@@ -57,8 +56,7 @@ namespace crudapi
                 {
                     var body = ea.Body;
                     var message = Encoding.UTF8.GetString(body);
-                    //var deserialized = JsonConvert.DeserializeObject<AddUser>(message);
-                    Console.WriteLine(message);
+                    Console.WriteLine(" [x] ------------------------------ Received --------------------------- {0}", message);
 
                     try
                     {
@@ -69,27 +67,27 @@ namespace crudapi
                             //if table already exists the below attempt of migration will go wrong
                             dataContext.Persons.Add(new eShopWeb.Models.Person() { name = "NAME - " + message });
                             dataContext.SaveChanges();
-                        }
+                                    }
                     }
                     catch (Exception ex)
                     {
                         var luca = ex.Message;
                     }
 
-
-
-
                 };
                 channel.BasicConsume(queue: "LdQueue",
                                                 autoAck: true,
                                                 consumer: consumer);
-
-                Console.WriteLine("Done.");
-                Console.ReadLine();
             }
-
-
-
+ 
         }
+ 
+
+
+
+   
+
+
+
     }
 }

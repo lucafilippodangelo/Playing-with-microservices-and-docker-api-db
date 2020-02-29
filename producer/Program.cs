@@ -1,25 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace crudapi
+namespace producer
 {
-    public class RabbitMqProducer
+    class Program
     {
-        public RabbitMqProducer() { }
-        public static async Task init(IApplicationBuilder applicationBuilder)
+        static async Task Main(string[] args)
         {
-        const string queueName = "LdQueue";
+            const string queueName = "LdQueue";
 
             try
             {
                 var connectionFactory = new ConnectionFactory()
                 {
-                    HostName = "localhost",
+                    HostName = "host.docker.internal",
                     UserName = "guest",
                     Password = "guest",
                     Port = 5672,
@@ -47,21 +43,22 @@ namespace crudapi
                                 basicProperties: null,
                                 body: Encoding.UTF8.GetBytes(body));
 
-                            Console.WriteLine("Message sent");
+
+                            Console.WriteLine("------------------------- Message sent -----------------------");
                             await Task.Delay(2500);
-}
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.ToString());
-                Console.ForegroundColor = ConsoleColor.White;
             }
 
             Console.WriteLine("End");
             Console.Read();
-    }
+
+
+        }
     }
 }

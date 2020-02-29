@@ -7,8 +7,8 @@ services:
     image: microsoft/mssql-server-linux:latest
     container_name: sql_database
     environment:
-    - SA_PASSWORD=Pass@word
-    - ACCEPT_EULA=Y
+        - SA_PASSWORD=Pass@word
+        - ACCEPT_EULA=Y
     ports:
     - "5433:1433"
 # inspect the IP of this db -> docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" sql_database
@@ -22,6 +22,25 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - sql.data #depend on the DATABASE service 
+      - rabbit
+
+  producer:
+        image: producer
+        container_name: producer
+        build: 
+          context: ./producer
+          dockerfile: Dockerfile
+        depends_on:
+            - rabbit
+
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbit_queue
+    ports:
+      - 5672:5672 #this is the door user to exchange messages
+      - 15672:15672 #access in http -> http://localhost:15672/#/ with credential guest-guest
+
+
 
 
 #// THIS IS A WEB APP, AT THE MOMENT I'M NOT RUNNING THE CONTAINER FOR THIS PROJECT
@@ -40,3 +59,5 @@ services:
 #EXAMPLE ON HOW TO DO THE SAME FOR THE SAME PROJECT IF I DO NOT RUN UNDER CONTAINERS
 #   http://localhost:61724/api/persons/getPersons (this is the port I have in launchSettings.json)
 #   http://localhost:61724/api/persons/addPerson (this is the port I have in launchSettings.json)
+
+#https://stackoverflow.com/questions/57007075/running-rabbitmq-in-docker-container/57007296
