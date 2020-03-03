@@ -44,8 +44,8 @@ namespace producer
                                 body: Encoding.UTF8.GetBytes(body));
 
 
-                            Console.WriteLine("------------------------- Message sent -----------------------");
-                            await Task.Delay(2500);
+                            Console.WriteLine("------------------------- Message sent PRODUCER -----------------------");
+                            await Task.Delay(4000);
                         }
                     }
                 }

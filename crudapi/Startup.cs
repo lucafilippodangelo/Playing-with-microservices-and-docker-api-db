@@ -41,9 +41,8 @@ namespace crudapi
                     var message = ex.Message;
                 }
             });
-
-            //var test = new RabbitMqConsumer();
-            //services.AddSingleton<IRabbitMqConsumer>(test);
+            
+           
 
             services.AddScoped<IPersonRepository, PersonRepository>();
 
@@ -70,8 +69,8 @@ namespace crudapi
                 app.UseDeveloperExceptionPage();
             }
 
-            //RabbitMqProducer.init(app);
-            RabbitMqConsumer.init(app);
+
+            //RabbitMqConsumer.init(app);
 
             app.UseMvc();
 
@@ -80,5 +79,7 @@ namespace crudapi
             .Wait();
 
         }
+
     }
+
 }

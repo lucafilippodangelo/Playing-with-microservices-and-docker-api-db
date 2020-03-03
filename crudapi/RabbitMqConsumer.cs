@@ -14,8 +14,7 @@ using System.Threading.Tasks;
 
 namespace crudapi
 {
- 
-
+   
     public class RabbitMqConsumer 
     {
        

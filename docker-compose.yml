@@ -2,6 +2,16 @@ version: '3.4'
 
 services:
 
+
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: rabbit_queue
+    hostname: rabbit
+    ports:
+      - 5672:5672 #this is the door user to exchange messages
+      - 15672:15672 #access in http -> http://localhost:15672/#/ with credential guest-guest
+
+
 #//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
   sql.data:
     image: microsoft/mssql-server-linux:latest
@@ -11,8 +21,18 @@ services:
         - ACCEPT_EULA=Y
     ports:
     - "5433:1433"
+
 # inspect the IP of this db -> docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" sql_database
 # how to connect from management studio: localhost,5444 - Pass@word
+
+  producer:
+        image: producer
+        container_name: producer
+        build: 
+          context: ./producer
+          dockerfile: Dockerfile
+        depends_on:
+            - rabbit
 
   crudapi:
     image: crudapi
@@ -24,22 +44,15 @@ services:
       - sql.data #depend on the DATABASE service 
       - rabbit
 
-  producer:
-        image: producer
-        container_name: producer
-        build: 
-          context: ./producer
-          dockerfile: Dockerfile
-        depends_on:
-            - rabbit
-
-  rabbit:
-    image: rabbitmq:3-management
-    container_name: rabbit_queue
-    ports:
-      - 5672:5672 #this is the door user to exchange messages
-      - 15672:15672 #access in http -> http://localhost:15672/#/ with credential guest-guest
-
+  crudapitwo:
+    image: crudapitwo
+    container_name: crud_api_two
+    build:
+      context: ./crudapitwo
+      dockerfile: Dockerfile
+    depends_on:
+      - rabbit
+      - producer
 
 
 
