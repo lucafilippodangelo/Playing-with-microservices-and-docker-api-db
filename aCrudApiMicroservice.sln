@@ -9,9 +9,11 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "crudapi", "crudapi\crudapi.csproj", "{C898496C-0445-40B2-8965-C96D4E0003D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "producer", "producer\producer.csproj", "{3340E8BA-DA55-40A5-9D60-733B25C78451}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "producer", "producer\producer.csproj", "{3340E8BA-DA55-40A5-9D60-733B25C78451}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crudapitwo", "crudapitwo\crudapitwo.csproj", "{58DC2C76-0F06-401F-A6C8-94893FECF1D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "crudapitwo", "crudapitwo\crudapitwo.csproj", "{58DC2C76-0F06-401F-A6C8-94893FECF1D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "consumer", "consumer\consumer.csproj", "{8ED4F0FE-5594-4B27-BE60-15730B98997E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,18 @@ Global
 		{58DC2C76-0F06-401F-A6C8-94893FECF1D1}.Release|x64.Build.0 = Release|Any CPU
 		{58DC2C76-0F06-401F-A6C8-94893FECF1D1}.Release|x86.ActiveCfg = Release|Any CPU
 		{58DC2C76-0F06-401F-A6C8-94893FECF1D1}.Release|x86.Build.0 = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|x64.Build.0 = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Debug|x86.Build.0 = Debug|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|x64.ActiveCfg = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|x64.Build.0 = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|x86.ActiveCfg = Release|Any CPU
+		{8ED4F0FE-5594-4B27-BE60-15730B98997E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

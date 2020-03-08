@@ -16,11 +16,14 @@ namespace producer
                 var connectionFactory = new ConnectionFactory()
                 {
                     HostName = "host.docker.internal",
+                    Port = 5672,
+                    DispatchConsumersAsync = true,
                     UserName = "guest",
                     Password = "guest",
-                    Port = 5672,
-                    RequestedConnectionTimeout = 3000, // milliseconds
+                    //RequestedConnectionTimeout = 3000, // milliseconds
                 };
+
+                //Console.WriteLine("------------------------- PRODUCER connection done -----------------------");
 
                 using (var rabbitConnection = connectionFactory.CreateConnection())
                 {
@@ -44,7 +47,7 @@ namespace producer
                                 body: Encoding.UTF8.GetBytes(body));
 
 
-                            Console.WriteLine("------------------------- Message sent PRODUCER -----------------------");
+                            Console.WriteLine("------------------------- PRODUCER Message sent -----------------------");
                             await Task.Delay(4000);
                         }
                     }
@@ -54,10 +57,6 @@ namespace producer
             {
                 Console.WriteLine(ex.ToString());
             }
-
-            Console.WriteLine("End");
-            Console.Read();
-
 
         }
     }

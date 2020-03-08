@@ -3,14 +3,14 @@ version: '3.4'
 services:
 
 
-  rabbit:
+  rabbitmqservice:
     image: rabbitmq:3-management
     container_name: rabbit_queue
-    hostname: rabbit
     ports:
       - 5672:5672 #this is the door user to exchange messages
       - 15672:15672 #access in http -> http://localhost:15672/#/ with credential guest-guest
-
+    networks:
+          - my-network-name
 
 #//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
   sql.data:
@@ -32,7 +32,22 @@ services:
           context: ./producer
           dockerfile: Dockerfile
         depends_on:
-            - rabbit
+            - rabbitmqservice
+        networks:
+           - my-network-name
+
+  consumer:
+        image: consumer
+        container_name: consumer
+        build: 
+          context: ./consumer
+          dockerfile: Dockerfile
+        depends_on:
+            - rabbitmqservice
+            - producer
+        networks:
+           - my-network-name
+
 
   crudapi:
     image: crudapi
@@ -42,7 +57,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - sql.data #depend on the DATABASE service 
-      - rabbit
+      - rabbitmqservice
 
   crudapitwo:
     image: crudapitwo
@@ -51,10 +66,14 @@ services:
       context: ./crudapitwo
       dockerfile: Dockerfile
     depends_on:
-      - rabbit
+      - rabbitmqservice
       - producer
 
+networks:
+  my-network-name:
+    driver: bridge
 
+#-----------------------------------------------
 
 #// THIS IS A WEB APP, AT THE MOMENT I'M NOT RUNNING THE CONTAINER FOR THIS PROJECT
 #  eshopweb:
