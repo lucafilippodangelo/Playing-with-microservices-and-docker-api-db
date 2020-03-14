@@ -27,6 +27,7 @@ namespace crudapi
             {
                 HostName = "host.docker.internal", //IT'S important to match the connection IP I see in the rabbitMQ web page -> http://localhost:15672/#/connections
                 Port = 5672,
+                DispatchConsumersAsync = true,
                 UserName = "guest",
                 Password = "guest"
             };
@@ -66,7 +67,7 @@ namespace crudapi
                             //if table already exists the below attempt of migration will go wrong
                             dataContext.Persons.Add(new eShopWeb.Models.Person() { name = "NAME - " + message });
                             dataContext.SaveChanges();
-                                    }
+                        }
                     }
                     catch (Exception ex)
                     {

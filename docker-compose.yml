@@ -1,26 +1,23 @@
 version: '3.4'
 
 services:
-
-
   rabbitmqservice:
     image: rabbitmq:3-management
     container_name: rabbit_queue
     ports:
       - 5672:5672 #this is the door user to exchange messages
       - 15672:15672 #access in http -> http://localhost:15672/#/ with credential guest-guest
-    networks:
-          - my-network-name
 
-#//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
-  sql.data:
-    image: microsoft/mssql-server-linux:latest
-    container_name: sql_database
-    environment:
-        - SA_PASSWORD=Pass@word
-        - ACCEPT_EULA=Y
-    ports:
-    - "5433:1433"
+
+##//LD DATABASE IN SEPARATED CONTAINER, Can be called from any other container
+#  sql.data:
+#    image: microsoft/mssql-server-linux:latest
+#    container_name: sql_database
+#    environment:
+#        - SA_PASSWORD=Pass@word
+#        - ACCEPT_EULA=Y
+#    ports:
+#    - "5433:1433"
 
 # inspect the IP of this db -> docker inspect -f "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" sql_database
 # how to connect from management studio: localhost,5444 - Pass@word
@@ -33,8 +30,7 @@ services:
           dockerfile: Dockerfile
         depends_on:
             - rabbitmqservice
-        networks:
-           - my-network-name
+
 
   consumer:
         image: consumer
@@ -45,33 +41,32 @@ services:
         depends_on:
             - rabbitmqservice
             - producer
-        networks:
-           - my-network-name
 
 
-  crudapi:
-    image: crudapi
-    container_name: crud_api
-    build:
-      context: ./crudapi
-      dockerfile: Dockerfile
-    depends_on:
-      - sql.data #depend on the DATABASE service 
-      - rabbitmqservice
 
-  crudapitwo:
-    image: crudapitwo
-    container_name: crud_api_two
-    build:
-      context: ./crudapitwo
-      dockerfile: Dockerfile
-    depends_on:
-      - rabbitmqservice
-      - producer
+#  crudapi:
+#    image: crudapi
+#    container_name: crud_api
+#    build:
+#      context: ./crudapi
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - sql.data #depend on the DATABASE service 
+#      - rabbitmqservice
 
-networks:
-  my-network-name:
-    driver: bridge
+#  crudapitwo:
+#    image: crudapitwo
+#    container_name: crud_api_two
+#    build:
+#      context: ./crudapitwo
+#      dockerfile: Dockerfile
+#    depends_on:
+#      - rabbitmqservice
+#      - producer
+#    networks:
+#      - my-network-name
+
+
 
 #-----------------------------------------------
 

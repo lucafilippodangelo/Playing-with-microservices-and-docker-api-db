@@ -23,7 +23,6 @@ namespace producer
                     //RequestedConnectionTimeout = 3000, // milliseconds
                 };
 
-                //Console.WriteLine("------------------------- PRODUCER connection done -----------------------");
 
                 using (var rabbitConnection = connectionFactory.CreateConnection())
                 {
@@ -39,7 +38,7 @@ namespace producer
 
                         while (true)
                         {
-                            string body = $"LD: {DateTime.Now.Ticks}";
+                            string body = $"LD: {DateTime.Now.Ticks} " + DateTime.UtcNow;
                             channel.BasicPublish(
                                 exchange: string.Empty,
                                 routingKey: queueName,
@@ -47,7 +46,7 @@ namespace producer
                                 body: Encoding.UTF8.GetBytes(body));
 
 
-                            Console.WriteLine("------------------------- PRODUCER Message sent -----------------------");
+                            Console.WriteLine("------------------------- PRODUCER: "+ body);
                             await Task.Delay(4000);
                         }
                     }

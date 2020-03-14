@@ -23,6 +23,7 @@ namespace crudapi
             //{
             //    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" });
             //});
+            //services.AddHostedService<RabbitMqBackgroundService>();
 
             services.AddDbContext<PersonContext>(c =>
             {

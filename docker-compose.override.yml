@@ -4,21 +4,21 @@
   
 version: '3.4'
 
-services:
-  sql.data:
-    environment:
-      - MSSQL_SA_PASSWORD=Pass@word
-      - ACCEPT_EULA=Y
-    ports:
-      - "5433:1433"
+#services:
+#  sql.data:
+#    environment:
+#      - MSSQL_SA_PASSWORD=Pass@word
+#      - ACCEPT_EULA=Y
+#    ports:
+#      - "5433:1433"
 
 
-  crudapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sql.data;Database=LdDb;User Id=sa;Password=Pass@word
-    ports:
-      - "32776:80"
+#  crudapi:
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ConnectionString=Server=sql.data;Database=LdDb;User Id=sa;Password=Pass@word
+#    ports:
+#      - "32776:80"
 
 
   #eshopweb:

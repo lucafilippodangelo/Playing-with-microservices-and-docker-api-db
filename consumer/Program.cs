@@ -15,7 +15,7 @@ namespace consumer
             {
                 HostName = "host.docker.internal",
                 Port = 5672,
-                DispatchConsumersAsync = false,
+                DispatchConsumersAsync = true,
                 UserName = "guest",
                 Password = "guest"
 
@@ -36,7 +36,7 @@ namespace consumer
 
             using (var channel = connection.CreateModel())
             {
-                //Console.WriteLine(" [x] ------------------------------ RECEIVER --------------------------- {0}");
+                Console.WriteLine(" [x] ------------------------------ RECEIVER MODEL CREATION--------------------------- {0}");
                 channel.QueueDeclare(queue: "LdQueue",
                                         durable: false,
                                         exclusive: false,
@@ -44,17 +44,16 @@ namespace consumer
                                         arguments: null
                                         );
 
-                var consumer = new EventingBasicConsumer(channel);
+                var consumer = new AsyncEventingBasicConsumer(channel);
 
 
                 try
                 {
-                    consumer.Received += (model, ea) =>
+                    consumer.Received += async (model, ea) =>
                     {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body);
                         Console.WriteLine(" [x] ------------------------------ RECEIVER THIS IS NOT HAPPENING --------------------------- {0}", message);
-
                     };
                 }
                 catch (Exception ex)

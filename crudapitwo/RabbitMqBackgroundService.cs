@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,14 +14,6 @@ namespace crudapitwo
 {
     public class RabbitMqBackgroundService : BackgroundService
     {
-
-
-        public RabbitMqBackgroundService()
-        {
-
-        }
-
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Console.WriteLine(" [x] ------------------------------ BACKGROUND PROCESS EXECUTION --------------------------- {0}");
@@ -28,6 +22,7 @@ namespace crudapitwo
             {
                 HostName = "host.docker.internal", //IT'S important to match the connection IP I see in the rabbitMQ web page -> http://localhost:15672/#/connections
                 Port = 5672,
+                DispatchConsumersAsync = true,
                 UserName = "guest",
                 Password = "guest"
                  
@@ -57,31 +52,16 @@ namespace crudapitwo
                                         arguments: null
                                         );
 
-                var consumer = new EventingBasicConsumer(channel);
+                var consumer = new AsyncEventingBasicConsumer(channel);
                
 
                 try {
-                    consumer.Received += (model, ea) =>
+                    consumer.Received += async (model, ea) =>
                     {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body);
                         Console.WriteLine(" [x] ------------------------------ THIS IS NOT HAPPENING --------------------------- {0}", message);
-
-                        //try
-                        //{
-                        //    using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-                        //    {
-                        //        var dataContext = serviceScope.ServiceProvider.GetService<PersonContext>();
-
-                        //        dataContext.Persons.Add(new eShopWeb.Models.Person() { name = "NAME - " + message });
-                        //        dataContext.SaveChanges();
-                        //    }
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    var luca = ex.Message;
-                        //}
-
+                        
                     };
                 }
                 catch (Exception ex)
@@ -91,7 +71,7 @@ namespace crudapitwo
 
 
                 channel.BasicConsume(queue: "LdQueue",
-                                                autoAck: true,
+                                                autoAck: false,
                                                 consumer: consumer);
             }
 
